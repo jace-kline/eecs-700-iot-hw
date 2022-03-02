@@ -15,12 +15,14 @@
 
 import sys
 import time
-import Adafruit_DHT
+import adafruit_dht
+import board
 
-dht_version = 11
-gpio_pin = 4
+pin = board.D4
+dht = adafruit_dht.DHT11(pin)
 
 while True:
-    hum, temp = Adafruit_DHT.read_retry(dht_version, gpio_pin)
-    print('Temp: {0:0.1f} C  Humidity: {1:0.1f} %'.format(temperature, humidity))
-    time.sleep(1)
+    temp = dht.temperature
+    hum = dht.humidity
+    print('Temp: {0:0.1f} C  Humidity: {1:0.1f} %'.format(temp, hum))
+    time.sleep(3)
