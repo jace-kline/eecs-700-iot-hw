@@ -1,1 +1,3 @@
 libgpiod2
+mosquitto
+mosquitto-clients
