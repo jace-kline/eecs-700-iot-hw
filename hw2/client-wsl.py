@@ -19,6 +19,9 @@ def create_mqtt_client(config_yml_path):
     client.connect(config['broker_ip'], config['port'])
     return client
 
+def on_message(client, data, message):
+    print(f"Received message from topic '{message.topic}': '{message.data}'")
+
 def main():
     # read in client name as argument
     config_yml_path = sys.argv[1] if len(sys.argv) > 1 else None
@@ -35,19 +38,21 @@ def main():
     for topic in topics:
         client.subscribe(topic)
         print(f"Subscribed to '{topic}'")
+    
+
+    # set callback function
+    client.on_message = on_message
 
     while True:
 
         # request temp and humidity status from MQTT broker
         client.publish("temp/request", "")
+        print("Published temperature request: 'temp/request'")
         client.publish("humidity/request", "")
-        print("Requested data from MQTT broker")
+        print("Published humidity request: 'humidity/request'")
 
-        # # print temp & humidity to terminal
-        # print('Temp: {0:0.1f} C  Humidity: {1:0.1f} %'.format(temp, hum))
-
-        # wait 5 seconds before reading again
-        time.sleep(5)
+        # wait 10 seconds before requesting again
+        time.sleep(10)
 
 # if this script is executed directly (not imported), then run main()
 if __name__ == "__main__":

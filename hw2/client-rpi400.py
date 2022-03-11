@@ -68,19 +68,30 @@ def main():
     # create Paho MQTT client from YAML config file
     client = create_mqtt_client(config_yml_path)
 
+    # subscribe to temperature and humidity request topics
+    topics = ["temp/request", "humidity/request"]
+    for topic in topics:
+        client.subscribe(topic)
+        print(f"Subscribed to '{topic}'")
+
+    def on_message(client, data, message):
+        if message.topic in topics:
+            # read temp & humidity data
+            temp, hum = reader.read()
+            res = None
+            if message.topic == 'temp/request':
+                res = str(temp)
+                client.publish("temp/status", str(temp))
+            else:
+                res = str(hum)
+                client.publish("humidity/status", str(hum))
+            print(f"Published message '{res}' to topic '{message.topic}'")
+
+    client.on_message = on_message
+
+    # busy wait for requests
     while True:
-        # read temp & humidity data
-        temp, hum = reader.read()
-
-        # publish temp and humidity status to MQTT broker
-        client.publish("temp/status", str(temp))
-        client.publish("humidity/status", str(hum))
-        print("Published data to MQTT broker")
-
-        # print temp & humidity to terminal
-        print('Temp: {0:0.1f} C  Humidity: {1:0.1f} %'.format(temp, hum))
-
-        # wait 5 seconds before reading again
+        paho_client.loop_misc()
         time.sleep(5)
 
 # if this script is executed directly (not imported), then run main()
