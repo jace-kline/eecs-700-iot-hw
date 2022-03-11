@@ -91,8 +91,7 @@ def main():
 
     # busy wait for requests
     while True:
-        paho_client.loop_misc()
-        time.sleep(5)
+        time.sleep(2)
 
 # if this script is executed directly (not imported), then run main()
 if __name__ == "__main__":

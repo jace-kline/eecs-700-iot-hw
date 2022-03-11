@@ -11,7 +11,7 @@ def create_mqtt_client(config_yml_path):
     config = load_yaml(config_yml_path)
     client = paho_client.Client(config['client_name'])
     client.tls_set(
-        ca_certs=config['ca_certs'],
+        ca_certs=config['cafile'],
         certfile=config['certfile'],
         keyfile=config['keyfile']
     )
