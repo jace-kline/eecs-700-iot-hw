@@ -20,7 +20,7 @@ def create_mqtt_client(config_yml_path):
     return client
 
 def on_message(client, data, message):
-    print(f"Received message from topic '{message.topic}': '{message.data}'")
+    print(f"Received message from topic '{message.topic}': {message.payload}")
 
 def main():
     # read in client name as argument
