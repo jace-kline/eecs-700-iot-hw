@@ -40,16 +40,18 @@ def main():
         print(f"Subscribed to '{topic}'")
     
 
-    # set callback function
+    # set callback function for receiving messages
     client.on_message = on_message
 
+    # run a background thread to send & receive messages
+    client.loop_start()
+    
     while True:
-
         # request temp and humidity status from MQTT broker
         client.publish("temp/request", "")
-        print("Published temperature request: 'temp/request'")
+        print("Published temperature request ('temp/request')")
         client.publish("humidity/request", "")
-        print("Published humidity request: 'humidity/request'")
+        print("Published humidity request ('humidity/request')")
 
         # wait 10 seconds before requesting again
         time.sleep(10)

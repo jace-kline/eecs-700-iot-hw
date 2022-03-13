@@ -75,6 +75,7 @@ def main():
         print(f"Subscribed to '{topic}'")
 
     def on_message(client, data, message):
+        print("here")
         if message.topic in topics:
             # read temp & humidity data
             temp, hum = reader.read()
@@ -87,11 +88,11 @@ def main():
                 client.publish("humidity/status", str(hum))
             print(f"Published message '{res}' to topic '{message.topic}'")
 
+    # set callback function for receiving messages
     client.on_message = on_message
 
     # busy wait for requests
-    while True:
-        time.sleep(2)
+    client.loop_forever()
 
 # if this script is executed directly (not imported), then run main()
 if __name__ == "__main__":
