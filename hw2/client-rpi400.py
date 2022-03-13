@@ -79,14 +79,19 @@ def main():
         if message.topic in topics:
             # read temp & humidity data
             temp, hum = reader.read()
+
             res = None
+            topic = None
             if message.topic == 'temp/request':
                 res = str(temp)
-                client.publish("temp/status", str(temp))
+                topic = 'temp/status'
             else:
                 res = str(hum)
-                client.publish("humidity/status", str(hum))
-            print(f"Published message '{res}' to topic '{message.topic}'")
+                topic = 'humidity/status'
+            
+            # publish data associated with the request
+            client.publish(topic, str(temp))
+            print(f"Published message '{res}' to topic '{topic}'")
 
     # set callback function for receiving messages
     client.on_message = on_message
