@@ -1,5 +1,4 @@
 import sys
-import time
 import adafruit_dht
 import board
 import paho.mqtt.client as paho_client
@@ -75,7 +74,6 @@ def main():
         print(f"Subscribed to '{topic}'")
 
     def on_message(client, data, message):
-        print("here")
         if message.topic in topics:
             # read temp & humidity data
             temp, hum = reader.read()
