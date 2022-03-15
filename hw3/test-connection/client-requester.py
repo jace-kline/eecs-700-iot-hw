@@ -65,8 +65,8 @@ def main():
     
     while True:
         # request temp and humidity status
-        client.publish("rpi400/temp_humidity/request", "")
-        print("Published data request ('rpi400/temp_humidity/request')")
+        client.publish("device/rpi400/request", "")
+        print("Published data request ('device/rpi400/request')")
 
         # wait 10 seconds before requesting again
         time.sleep(10)

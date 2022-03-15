@@ -54,7 +54,9 @@ def create_mqtt_client(config_yml_path):
     config = load_yaml(config_yml_path)
 
     # set client params
-    client = paho_client.Client(config['client_name'])
+    client_name = config['client_name']
+    client = paho_client.Client(client_name)
+    client.name = client_name
     client.tls_set(
         ca_certs=config['cafile'],
         certfile=config['certfile'],
@@ -95,15 +97,13 @@ def main():
     def on_message(client, data, message):
         # read temp & humidity data
         temp, hum = reader.read()
-        time = datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
-        topic = 'rpi400/temp_humidity/update'
+        topic = f'device/{client.name}/data'
         payload = json.dumps(dict([
-            ('time', time),
-            ('temp', temp),
+            ('temperature', temp),
             ('humidity', hum)
         ]))
         client.publish(topic, payload)
-        print(f"[{time}] Published message to topic {topic}")
+        print(f"Published message to topic {topic}")
 
     # set callback function for receiving messages
     client.on_message = on_message
