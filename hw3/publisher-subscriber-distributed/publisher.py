@@ -43,13 +43,6 @@ def create_mqtt_client(config_yml_path):
 
     return client
 
-def mk_state(attrs):
-    return {
-        "state": {
-            "reported": attrs
-        }
-    }
-
 def on_message(client, userdata, message):
     data = message.payload.decode()
     if message.topic == 'device/rpi400/data':
